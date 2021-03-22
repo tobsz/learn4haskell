@@ -229,11 +229,11 @@ Boolean 'and' operator:
 
 Addition of two numbers:
 >>> :t (+)
-(+) :: (Num a) => a -> a -> a
+(+) :: Num a => a -> a -> a
 
 Maximum of two values:
 >>> :t max
-max :: (Ord a) => a -> a -> a
+max :: Ord a => a -> a -> a
 
 You might not understand each type at this moment, but don't worry! You've only
 started your Haskell journey. Types will become your friends soon.
@@ -289,7 +289,7 @@ ghci> 1 + 2
   type. In this case, polymorphic types will default to some standard types:
 
 ghci> :t +d (+)
-(+) :: Integer -> Integer -> Integer
+(+) :: Int -> Int -> Int
 
 Get ready for the next task, brave programmer! Evaluate the following
 expressions in GHCi
@@ -301,25 +301,25 @@ expressions in GHCi
   functions and operators first. Remember this from the previous task? ;)
 
 >>> 1 + 2
-3 :: (Num a) => a
+3
 
 >>> 10 - 15
-(-5) :: (Num a) => a
+-5
 
 >>> 10 - (-5)  -- negative constants require ()
-5 :: (Num a) => a
+15
 
 >>> (3 + 5) < 10
-True :: Bool
+True
 
 >>> True && False
-False :: Bool
+False
 
 >>> 10 < 20 || 20 < 5
-True :: Bool
+True
 
 >>> 2 ^ 10  -- power
-1024 :: (Num a) => a
+1024
 
 >>> not False
 True
@@ -491,8 +491,8 @@ Implement a function that returns the last digit of a given number.
   whether it works for you!
 -}
 
-lastDigit :: Integer -> Integer
-lastDigit n = mod n 10
+lastDigit :: Int -> Int
+lastDigit n = mod (abs n) 10
 
 
 {- |
@@ -562,8 +562,11 @@ Casual reminder about adding top-level type signatures for all functions :)
 mid :: Int -> Int -> Int -> Int
 mid x y z
     | x < y && y < z = y
-    | x > y && x < z = x
-    | x < z && y > z = z
+    | x > y && y > z = y
+    | x < z && z < y = z
+    | x > z && z > y = z
+    | y < x && x < z = x
+    | y > x && x > z = x
     | x == y = x
     | x == z = x
     | y == z = y
@@ -649,11 +652,12 @@ Try to introduce variables in this task (either with let-in or where) to avoid
 specifying complex expressions.
 -}
 
-sumLast2 :: Integer -> Integer
+sumLast2 :: Int -> Int
 sumLast2 n = tens + ones
   where
-    ones = mod n 10
-    tens = div (mod n 100) 10
+    ones = mod x 10
+    tens = div (mod x 100) 10
+    x = abs n
 
 
 {- |
@@ -674,7 +678,7 @@ You need to use recursion in this task. Feel free to return to it later, if you
 aren't ready for this boss yet!
 -}
 
-firstDigit :: Integer -> Integer
+firstDigit :: Int -> Int
 firstDigit n
     | n < 0 = firstDigit (abs n)
     | n < 10 = n
