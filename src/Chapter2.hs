@@ -888,13 +888,11 @@ and reverses it.
   cheating!
 -}
 rewind :: [a] -> [a]
-rewind [] = []
 rewind xs = rewind' xs []
   where
     rewind' :: [a] -> [a] -> [a]
-    rewind' (y:ys) acc
-        | null ys = y : acc
-        | otherwise = rewind' ys $! (y : acc)
+    rewind' [] acc = acc
+    rewind' (y:ys) acc = rewind' ys $! (y : acc)
 
 
 {-
