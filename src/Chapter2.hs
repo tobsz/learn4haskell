@@ -766,8 +766,8 @@ the list with only those lists that contain a passed element.
 
 🕯 HINT: Use the 'elem' function to check whether an element belongs to a list
 -}
-contains = error "contains: Not implemented!"
-
+contains :: Int -> [[Int]] -> [[Int]]
+contains n = filter (\xs -> n `elem` xs)
 
 {- |
 =🛡= Eta-reduction
@@ -806,13 +806,14 @@ Let's now try to eta-reduce some of the functions and ensure that we
 mastered the skill of eta-reducing.
 -}
 divideTenBy :: Int -> Int
-divideTenBy x = div 10 x
+divideTenBy = div 10
 
--- TODO: type ;)
-listElementsLessThan x l = filter (< x) l
+listElementsLessThan :: Int -> [Int] -> [Int]
+listElementsLessThan x = filter (< x)
 
 -- Can you eta-reduce this one???
-pairMul xs ys = zipWith (*) xs ys
+pairMul :: (Num a) => [a] -> [a] -> [a]
+pairMul = zipWith (*)
 
 {- |
 =🛡= Lazy evaluation
@@ -867,7 +868,10 @@ list.
 
 🕯 HINT: Use the 'cycle' function
 -}
-rotate = error "rotate: Not implemented!"
+rotate :: Int -> [a] -> [a]
+rotate n xs
+    | n >= 0 = take (length xs) $ drop n $ cycle xs
+    | otherwise = take (length xs) $ drop (n + length xs) $ cycle xs
 
 {- |
 =💣= Task 12*
@@ -883,7 +887,14 @@ and reverses it.
   function, but in this task, you need to implement it manually. No
   cheating!
 -}
-rewind = error "rewind: Not Implemented!"
+rewind :: [a] -> [a]
+rewind [] = []
+rewind xs = rewind' xs []
+  where
+    rewind' :: [a] -> [a] -> [a]
+    rewind' (y:ys) acc
+        | null ys = y : acc
+        | otherwise = rewind' ys $! (y : acc)
 
 
 {-
